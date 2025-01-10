@@ -1,7 +1,6 @@
 import os
 from google.oauth2.service_account import Credentials
 import gspread
-import tracker
 from fuzzywuzzy import fuzz, process
 
 SCOPES      = ["https://www.googleapis.com/auth/spreadsheets"]
