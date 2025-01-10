@@ -4,7 +4,7 @@ import gspread
 from fuzzywuzzy import fuzz, process
 
 SCOPES      = ["https://www.googleapis.com/auth/spreadsheets"]
-TOKEN       = os.environ["sheets_token"]
+TOKEN       = 'AIzaSyDUCTN9tPQDx_s8_7WzTuaYT0S1-65iLzc'
 SHEETS_ID   = '1mz-b8zojmVwpVQ8qdL9Y-5YCB1Jly62Jn60f7gS-HDc'
 
 validCharacters = ['Adam Warlock',
@@ -47,7 +47,6 @@ class Sheets:
     def __init__(self):
         self.sheet = None
         try:
-            print(os.getcwd())
             creds           = Credentials.from_service_account_file("token.json", scopes=SCOPES)
             client          = gspread.authorize(creds)
             self.sheet      = client.open_by_key(SHEETS_ID)
@@ -128,7 +127,7 @@ class Sheets:
 
         for row_num, entry in enumerate(self.worksheet.col_values(1), start=1):
             if entry == name:
-                return self.worksheet.acell(f'O{row}').value
+                return self.worksheet.acell(f'O{row_num}').value
 
         return f"{name} isn't found on the list."
 

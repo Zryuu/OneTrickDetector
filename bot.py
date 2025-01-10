@@ -3,7 +3,7 @@ from twitchio.ext import commands
 from sheets import Sheets
 import datetime
 
-TOKEN    = os.environ["twitchio_token"] # API Token
+TOKEN    = 'i3ffl72dpqdhx0fo3xt13prm0tmjkf' # API Token
 PREFIX   = '+'    # Command syntax
 LIST     = 'https://docs.google.com/spreadsheets/d/1mz-b8zojmVwpVQ8qdL9Y-5YCB1Jly62Jn60f7gS-HDc'   # Link to sheets
 CHANNELS = ['Mendo']
@@ -12,7 +12,6 @@ CHANNELS = ['Mendo']
 _Sheets = Sheets()
 
 class Bot(commands.Bot):
-
     def __init__(self):
         super().__init__(token=TOKEN, prefix=PREFIX, initial_channels=CHANNELS)
 
