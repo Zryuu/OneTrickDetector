@@ -48,6 +48,7 @@ class Sheets:
     def __init__(self):
         self.sheet = None
         try:
+            print(os.getcwd())
             creds           = Credentials.from_service_account_file("token.json", scopes=SCOPES)
             client          = gspread.authorize(creds)
             self.sheet      = client.open_by_key(SHEETS_ID)
