@@ -24,7 +24,7 @@ validCharacters = ['Adam Warlock',
 'Jeff',
 'Loki',
 'Luna',
-'Mr. Fantastic',
+'Mister Fantastic',
 'Magik',
 'Magneto',
 'Mantis',
@@ -55,6 +55,8 @@ class Sheets:
             self.avoids     = self.sheet.worksheet("Current Avoids")
         except Exception as e:
             print(f"An error occurred in sheets::init -- {e}")
+    def hasNum(self, str):
+        return any(char.isdigit() for char in str)
 
     def GetLastRow(self):
         try:
@@ -73,8 +75,10 @@ class Sheets:
         matchID = character
         validCharacter = ""
 
+        print(self.hasNum(character))
+
         # Check if using Character or MatchID (for players with non-ascii names)
-        if character.isnumeric():
+        if self.hasNum(character):
             columns = ['A', 'D', 'G']
             values = [name, date, matchID]
         else:
@@ -83,7 +87,6 @@ class Sheets:
 
             if regular:
                 return  regular
-
             columns = ['A', 'D', 'K', 'O']
             values = [name, date, validCharacter[0], validCharacter[0]]
 
@@ -95,7 +98,7 @@ class Sheets:
 
         except Exception as e:
             print(f"An error occurred in sheets::addInfo::tryCatch::foreach -- {e}")
-            return False, "Yell at Zryu becuase he messed up."
+            return False, "Something broke, yell at Zryu."
 
     def AddNewCharacterInfo(self, name, character, row):
 

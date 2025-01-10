@@ -1,0 +1,5 @@
+twitchio==2.10.0
+gspread==6.1.4
+google-auth==2.37.0
+fuzzywuzzy==0.18.0
+python-Levenshtein==0.26.1
