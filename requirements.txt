@@ -8,5 +8,5 @@ googleapis-common-protos==1.66.0
 gspread==6.1.4
 Levenshtein==0.26.1
 oauthlib==3.2.2
-python-Levenshtein==0.26.1
+python-Levenshtein==0.25.1
 twitchio==2.10.0
