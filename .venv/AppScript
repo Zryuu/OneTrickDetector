@@ -1,0 +1,64 @@
+function onEdit(e) {
+  addMatchIDSuffix(e);
+  updateDataCharcters(e);
+
+
+}
+
+function addMatchIDSuffix(e)
+{
+  var suffix = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Characters').getRange('G1').getValue();
+  var range  = e.range;
+  var value  = range.getValue();
+  var column = range.getColumn();
+
+  if (column === 7 && range.getRow() != 1) {
+
+    var trimmedValue = value !== null ? value.toString().trim() : "";
+
+    if (trimmedValue.endsWith(suffix) || trimmedValue === "") return;
+
+    // Update the cell by adding the suffix
+    range.setValue(trimmedValue + suffix);
+  }
+}
+
+function updateDataCharcters(e)
+{
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Player Tracker');
+  var range = e.range;
+  var value = range.getValue();
+  var column = range.getColumn();
+  var row = range.getRow();
+
+  if (column === 11 && row > 1)
+  {
+
+    new_char = sheet.getRange(row, 11).getValue();
+
+    if (!new_char) return;
+
+    characters = sheet.getRange(row, 15).getValue();
+
+    char_array = characters.split(", ")
+
+    for (let i = 0; i < char_array.length; i++)
+    {
+      if (char_array[i] === new_char)
+      {
+        return;
+      }
+    }
+
+    if (characters === "")
+    {
+      sheet.getRange(row, 15).setValue(new_char);
+      return;
+    }
+
+    result = characters + ", " + new_char;
+    sheet.getRange(row, 15).setValue(result);
+
+  }
+
+}
