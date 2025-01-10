@@ -5,14 +5,14 @@ import datetime
 
 TOKEN  = os.environ["twitchio_token"] # API Token
 PREFIX = '+'    # Command syntax
-LIST   = 'https://docs.google.com/spreadsheets/d/1mz-b8zojmVwpVQ8qdL9Y-5YCB1Jly62Jn60f7gS-HDc/edit?usp=sharing'   # Link to sheets
+LIST   = 'https://docs.google.com/spreadsheets/d/1mz-b8zojmVwpVQ8qdL9Y-5YCB1Jly62Jn60f7gS-HDc'   # Link to sheets
 
 _Sheets = Sheets()
 
 class Bot(commands.Bot):
 
     def __init__(self):
-        super().__init__(token=TOKEN, prefix=PREFIX, initial_channels=['Zryu'])
+        super().__init__(token=TOKEN, prefix=PREFIX, initial_channels=['Mendo'])
 
     async def event_ready(self):
         # Notify us when everything is ready!
@@ -28,12 +28,15 @@ class Bot(commands.Bot):
             return
 
         # Print the contents of our message to console...
-        print(f'{message.author.name}')
+        print(f'Message received by: {message.author.name}')
 
         # Since we have commands and are overriding the default `event_message`
         # We must let the bot know we want to handle and invoke our commands...
         # SENDS MESSAGE TO COMMANDS TO SEE IF MATCHING COMMAND
         await self.handle_commands(message)
+
+    def is_mod(self, ctx: commands.Context):
+        return ctx.author.is_mod or ctx.author.name == "zryu"
 
     @commands.command(name='ping')
     async def ping(self, ctx: commands.Context):
@@ -48,14 +51,14 @@ class Bot(commands.Bot):
     # Link list.
     @commands.command(name='list', aliases=['sheets', 'sheet', 'link'])
     async def list(self, ctx: commands.Context):
-        await ctx.send(f'Heres the link: {List}')
+        await ctx.send(f'Heres the link: {LIST}')
 
     # Add players to list.
     @commands.command(name='add')
     async def add(self, ctx: commands.Context):
         # check if mod or I
-        if not ctx.author.is_mod or ctx.author.name == "Zryu":
-            await ctx.send(f'Only mods may use this command.')
+        if not self.is_mod(ctx):
+            await ctx.send("Only mods can use this command.")
             return
 
         # removes command from message
@@ -105,16 +108,15 @@ class Bot(commands.Bot):
     @commands.command(name='avoids')
     async def get_avoids(self, ctx: commands):
         avoids = _Sheets.GetAvoids()
+        message = "Current avoids are: "
 
         if avoids == None:
             await ctx.send(f'Currently there are no avoids.')
             return
 
-        message = "Current avoids are: "
-
         for i, avoid in enumerate(avoids):
             if avoid is not None:  # Check if avoid is not None before concatenating
-                if i == len(avoids) - 1:
+                if i == len(avoids):
                     message += avoid
                     break
 
@@ -125,8 +127,8 @@ class Bot(commands.Bot):
     @commands.command(name="addavoid")
     async def add_avoid(self, ctx: commands):
 
-        if not ctx.author.is_mod or ctx.author.name == "Zryu":
-            await ctx.send(f'Only mods may use this command.')
+        if not self.is_mod(ctx):
+            await ctx.send("Only mods can use this command.")
             return
 
         name = ctx.message.content.replace(f'{PREFIX}addavoid ', "")

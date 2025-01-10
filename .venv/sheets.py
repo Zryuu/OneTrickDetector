@@ -70,22 +70,22 @@ class Sheets:
 
     def AddInfo(self, name, character, date):
         row = self.GetLastRow()
-        matchID = ""
+        matchID = character
         validCharacter = ""
 
         # Check if using Character or MatchID (for players with non-ascii names)
         if character.isnumeric():
             columns = ['A', 'D', 'G']
-            values = [name, date, character]
+            values = [name, date, matchID]
         else:
             validCharacter = process.extractOne(character, validCharacters)
-
             regular = self.CheckIfPresent(name, validCharacter[0])
+
             if regular:
                 return  regular
 
-            columns = ['A', 'D', 'K']
-            values = [name, date, validCharacter[0]]
+            columns = ['A', 'D', 'K', 'O']
+            values = [name, date, validCharacter[0], validCharacter[0]]
 
         # Push data to sheet.
         try:
@@ -152,9 +152,14 @@ class Sheets:
 
     def GetAvoids(self):
         names = self.avoids.col_values(1)
+        names.remove("Player")
+
+        if len(names) < 1:
+            return
+
         results = [None] * len(names)
 
-        for i in range(1, 4):
+        for i in range(len(names)):
             results[i] = names[i]
 
         return results
