@@ -3,7 +3,7 @@ from twitchio.ext import commands
 from sheets import Sheets
 import datetime
 
-TOKEN    = 'p7ckk9y6xzepawmazrtb8cg7qtx0di' # API Token
+TOKEN    = os.environ["twitchio_token"] # API Token
 PREFIX   = '!'    # Command syntax
 LIST     = 'https://docs.google.com/spreadsheets/d/1mz-b8zojmVwpVQ8qdL9Y-5YCB1Jly62Jn60f7gS-HDc'   # Link to sheets
 CHANNELS = ['Mendo']
