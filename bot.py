@@ -3,7 +3,7 @@ from twitchio.ext import commands
 from sheets import Sheets
 import datetime
 
-TOKEN    = 'i3ffl72dpqdhx0fo3xt13prm0tmjkf' # API Token
+TOKEN    = os.environ["twitchio_token"] # API Token
 PREFIX   = '+'    # Command syntax
 LIST     = 'https://docs.google.com/spreadsheets/d/1mz-b8zojmVwpVQ8qdL9Y-5YCB1Jly62Jn60f7gS-HDc'   # Link to sheets
 CHANNELS = ['Mendo']
@@ -49,10 +49,12 @@ class Bot(commands.Bot):
         # Sending a reply back to the channel is easy... Below is an example.
         await ctx.send(f'pong {ctx.author.name}!')
 
-    # Link list.
+    # Link list. (No need to link spreadsheet)
     @commands.command(name='list', aliases=['sheets', 'sheet', 'link'])
     async def list(self, ctx: commands.Context):
-        await ctx.send(f'Heres the link: {LIST}')
+        # await ctx.send(f'Heres the link: {LIST}')
+        return
+
 
     # Add players to list.
     @commands.command(name='add')
