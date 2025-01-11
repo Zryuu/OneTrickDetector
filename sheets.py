@@ -125,8 +125,10 @@ class Sheets:
     def GetPlayerCharacters(self, name):
         entries = self.worksheet.col_values(1)
 
+        validName = process.extractOne(name, entries)
+
         for row_num, entry in enumerate(self.worksheet.col_values(1), start=1):
-            if entry == name:
+            if entry == validName:
                 return self.worksheet.acell(f'O{row_num}').value
 
         return f"{name} isn't found on the list."
