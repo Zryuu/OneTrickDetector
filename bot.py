@@ -98,7 +98,7 @@ class Bot(commands.Bot):
 
         await ctx.send(f'{added[1]}')
 
-    @commands.command(name='characters', aliases=["chars"])
+    @commands.command(name='characters', aliases=["chars", "char"])
     async def characters(self, ctx: commands):
         # checks how the user called the command and sanitizes string.
         if ctx.message.content.startswith(f'{PREFIX}chars '):

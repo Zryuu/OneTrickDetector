@@ -130,7 +130,7 @@ class Sheets:
         if score >= 80:
             for row_num, entry in enumerate(self.worksheet.col_values(1), start=1):
                 if entry == validName:
-                    return self.worksheet.acell(f'O{row_num}').value
+                    return f'{validName}: ' + self.worksheet.acell(f'O{row_num}').value
 
         return f"{name} isn't found on the list."
 
