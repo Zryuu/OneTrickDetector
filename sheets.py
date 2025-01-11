@@ -4,7 +4,7 @@ import gspread
 from fuzzywuzzy import fuzz, process
 
 SCOPES      = ["https://www.googleapis.com/auth/spreadsheets"]
-TOKEN       = os.environ["sheets_token"]
+TOKEN       = 'AIzaSyDUCTN9tPQDx_s8_7WzTuaYT0S1-65iLzc'
 SHEETS_ID   = '1mz-b8zojmVwpVQ8qdL9Y-5YCB1Jly62Jn60f7gS-HDc'
 
 validCharacters = ['Adam Warlock',
