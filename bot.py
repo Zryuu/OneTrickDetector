@@ -20,6 +20,7 @@ class Bot(commands.Bot):
         # We are logged in and ready to chat and use commands...
         print(f'Logged in as | {self.nick}')
         print(f'User id is | {self.user_id}')
+        await self.join_channels(CHANNELS)
 
     # Listen for messages from viewers.
     async def event_message(self, message):
