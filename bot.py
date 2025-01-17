@@ -1,12 +1,12 @@
-import os
 from twitchio.ext import commands
 from sheets import Sheets
+import random
 import datetime
 
-TOKEN    = os.environ["twitchio_token"] # API Token
+TOKEN    = 'p7ckk9y6xzepawmazrtb8cg7qtx0di' # API Token
 PREFIX   = '!'    # Command syntax
 LIST     = 'https://docs.google.com/spreadsheets/d/1mz-b8zojmVwpVQ8qdL9Y-5YCB1Jly62Jn60f7gS-HDc'   # Link to sheets
-CHANNELS = ['Mendo']
+CHANNELS = ['Mendo', 'Zryu', 'spooo_']
 
 
 _Sheets = Sheets()
@@ -26,11 +26,7 @@ class Bot(commands.Bot):
     async def event_message(self, message):
         # Messages with echo set to True are messages sent by the bot, ignoring self messages.
         if message.echo:
-            print(f'Bot: {message.content}')
             return
-
-        # Print the contents of our message to console...
-        print(f'Message received by: {message.author.name}')
 
         # Since we have commands and are overriding the default `event_message`
         # We must let the bot know we want to handle and invoke our commands...
@@ -40,15 +36,11 @@ class Bot(commands.Bot):
     def is_mod(self, ctx: commands.Context):
         return ctx.author.is_mod or ctx.author.name == "zryu"
 
-    @commands.command(name='ping')
-    async def ping(self, ctx: commands.Context):
-        # Here we have a command hello, we can invoke our command with our prefix and command name
-        # e.g ?hello
-        # We can also give our commands aliases (different names) to invoke with.
-
-        # Send a hello back!
-        # Sending a reply back to the channel is easy... Below is an example.
-        await ctx.send(f'pong {ctx.author.name}!')
+    @commands.command(name='c9', aliases=['C9'])
+    async def C9(self, ctx: commands.Context):
+        names = ['RYB', 'SureFour', 'Gods', 'Roolf', 'Adam']
+        i = random.randint(0, 4)
+        await ctx.send(f"It wasn't Mendo's fault, {names[i]} called run!")
 
     # Link list. (No need to link spreadsheet)
     @commands.command(name='list', aliases=['sheets', 'sheet', 'link'])
@@ -145,7 +137,6 @@ class Bot(commands.Bot):
 
 bot = Bot()
 bot.run()
-# bot.run() is blocking and will stop execution of any below code here until stopped or closed.
 
 
 
