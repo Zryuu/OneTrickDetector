@@ -101,8 +101,12 @@ class Bot(commands.Bot):
         # Returns info
         await ctx.send(f'{_Sheets.GetPlayerCharacters(name)}')
 
+    # Only one section for avoids currently.
     @commands.command(name='avoids')
     async def get_avoids(self, ctx: commands):
+        if ctx.message.channel.name != 'Mendo':
+            return
+
         avoids = _Sheets.GetAvoids()
         message = "Current avoids are: "
 

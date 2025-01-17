@@ -1,3 +1,4 @@
+//  Run every time an edit is made to the sheet.
 function onEdit(e) {
   addMatchIDSuffix(e);
   updateDataCharcters(e);
@@ -5,15 +6,51 @@ function onEdit(e) {
 
 }
 
+// Run every minute. Checks if any changes are made to the sheet by the bot.
+function checkForUpdates() {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Player Tracker');
+  var char_data = sheet.getRange('K2:K').getValues();
+  var match_data = sheet.getRange('G2:G').getValues();
+  var char_col = 11 // column K
+  var match_col = 7 // column G
+  
+  // Character data
+  for (var i = 0; i < char_data.length; i++) {
+    var row = i + 2;
+    var newChar = char_data[i][0];
+    if (newChar) {
+      var range = sheet.getRange(row, char_col);
+      updateDataCharcters({ range: range });
+    }
+  }
+
+  // Match data
+  for (var i = 0; i < match_data.length; i++) {
+    var row = i + 2;
+    var newMatch = match_data[i][0];
+    if (newMatch) {
+      var range = sheet.getRange(row, match_col);
+      addMatchIDSuffix({ range: range });
+    }
+  }
+
+}
+
+//  Adds MatchID suffix....self explanitory.
 function addMatchIDSuffix(e)
 {
+  //  Checks if its not the Player Tracker.
+  if (SpreadsheetApp.getActiveSheet().getName() != 'Player Tracker') {
+    return
+  }
+
   var suffix = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Characters').getRange('G1').getValue();
   var range  = e.range;
   var value  = range.getValue();
   var column = range.getColumn();
-
+  
   if (column === 7 && range.getRow() != 1) {
-
+    
     var trimmedValue = value !== null ? value.toString().trim() : "";
 
     if (trimmedValue.endsWith(suffix) || trimmedValue === "") return;
@@ -23,6 +60,7 @@ function addMatchIDSuffix(e)
   }
 }
 
+//  Updates DataCharacters based on whats in Characters. Keeps track of all characters used by anyone on the list.
 function updateDataCharcters(e)
 {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Player Tracker');
@@ -62,3 +100,4 @@ function updateDataCharcters(e)
   }
 
 }
+
