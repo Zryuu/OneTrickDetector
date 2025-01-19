@@ -4,7 +4,7 @@ import gspread
 from fuzzywuzzy import fuzz, process
 
 SCOPES      = ["https://www.googleapis.com/auth/spreadsheets"]
-TOKEN       = 'AIzaSyDUCTN9tPQDx_s8_7WzTuaYT0S1-65iLzc'
+TOKEN       = os.environ['sheets_token']
 SHEETS_ID   = '1mz-b8zojmVwpVQ8qdL9Y-5YCB1Jly62Jn60f7gS-HDc'
 
 validCharacters = ['Adam Warlock',
@@ -180,6 +180,7 @@ class Sheets:
         col_index = 0
         row_index = 0
 
+        # TODO:: make more modular.
         # finds column and row containing Channel name.
         for i in range(1, 2):
             rows = self.avoids.row_values(i * 5)
