@@ -4,7 +4,7 @@ import gspread
 from fuzzywuzzy import fuzz, process
 
 SCOPES      = ["https://www.googleapis.com/auth/spreadsheets"]
-TOKEN       = os.environ['sheets_token']
+TOKEN       = 'AIzaSyDUCTN9tPQDx_s8_7WzTuaYT0S1-65iLzc'
 SHEETS_ID   = '1mz-b8zojmVwpVQ8qdL9Y-5YCB1Jly62Jn60f7gS-HDc'
 
 validCharacters = ['Adam Warlock',
@@ -105,12 +105,12 @@ class Sheets:
 
         for char in characters:
             if char == character:
-                return True, f"{name} is already on the list at row: {row}. Character already in Database."
+                return True, f"{name} is already on the list at row {row}. Character already in Database."
 
         characters = self.worksheet.acell(f'O{row}').value + ", " + character
         self.worksheet.update_acell(f"O{row}", character)
 
-        return True, f"{name} is already on the list at row: {row}. Added new character to database."
+        return True, f"{name} is already on the list at row {row}. Added new character to database."
 
     # TODO:: Make more modular
     def CheckIfPresent(self, name, character):
@@ -134,37 +134,73 @@ class Sheets:
 
         return f"{name} isn't found on the list."
 
-    def AddAvoid(self, name):
-        rows = self.avoids.col_values(1)
+    def AddAvoid(self, name, channel):
+        col_index = 0
+        row_index = 0
 
+        # Finds column and row containing Channel name.
+        for i in range(1, 2):
+            chan_rows = self.avoids.row_values(i * 5)
+
+            for index, chan in enumerate(chan_rows):
+                if chan == channel:
+                    print(f'{index + 1}: {chan}')
+                    col_index = index + 1
+                    row_index = i * 5
+                    break
+            if col_index != 0:
+                break
+
+        if col_index == 0:
+            return False
+
+        # gets rows above channel name.
+        rows = [self.avoids.cell(row, col_index).value for row in range(row_index - 3, row_index)]
+
+        # removes empty entries
+        rows = [row for row in rows if row is not None]
+
+        # if no current avoids.
         if len(rows) < 1:
-            self.avoids.update_acell(f"A2", name)
-            print("yes")
-            return
+            self.avoids.update_acell(f"{chr(64+col_index)}{row_index - 3}", name)
+            return True
 
         # If rows 2-4 are all filled
-        if len(rows) >= 4 and all(row for row in rows[2:4]):
+        if len(rows) >= 3 and all(row for row in rows):
             for i in range(2, 5):
                 if i < len(rows):
-                    self.avoids.update_cell(i, 1, rows[i])
+                    self.avoids.update_cell(i, col_index, rows[i])
+            self.avoids.update_acell(f"{chr(64+col_index)}{row_index-1}", name)
+        else: # if not all full
+            self.avoids.update_acell(f"{chr(64+col_index)}{(row_index - 3) + len(rows)}", name)
 
-            self.avoids.update_acell(f"A4", name)
-        else:
-            print('hello')
-            row = len(rows) + 1
-            self.avoids.update_acell(f"A{row}", name)
+        return True
 
+    def GetAvoids(self, channel):
+        col_index = 0
+        row_index = 0
 
-    def GetAvoids(self):
-        names = self.avoids.col_values(1)
-        names.remove("Player")
+        # finds column and row containing Channel name.
+        for i in range(1, 2):
+            rows = self.avoids.row_values(i * 5)
 
-        if len(names) < 1:
-            return
+            for index, chan in enumerate(rows):
+                if chan == channel:
+                    col_index = index + 1
+                    row_index = i * 5
+                    break
+            if col_index != 0:
+                break
 
-        results = [None] * len(names)
+        if col_index == 0:
+            return "Error: Can't find channel."
 
-        for i in range(len(names)):
-            results[i] = names[i]
+        # Init return list
+        results = [None]
 
+        # Gets values in rows channel - 3 to channel - 1 (3 above to 1 above streamer's name). Skips empty entries.
+        for i in range(row_index - 3, row_index):
+            results.append(self.avoids.cell(i, col_index).value)
+
+        results = [r for r in results if r]
         return results
